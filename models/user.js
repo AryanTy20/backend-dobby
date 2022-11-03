@@ -12,7 +12,7 @@ const imgSchema = new mongoose.Schema({
 });
 
 const userScheme = new mongoose.Schema({
-  name: {
+  username: {
     type: String,
     required: true,
     unique: true,

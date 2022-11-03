@@ -4,10 +4,10 @@ import { CustomError, JWT } from "../utils";
 
 export const AuthController = {
   async signUp(req, res, next) {
-    const { name, password, repeatPassword } = req.body;
-    if (!name || !password || !repeatPassword) {
+    const { username, password, repeatPassword } = req.body;
+    if (!username || !password || !repeatPassword) {
       return next(
-        CustomError(403, "{name,password,repeatPassword} is required")
+        CustomError(403, "{username,password,repeatPassword} is required")
       );
     }
     if (password !== repeatPassword) {
@@ -18,7 +18,7 @@ export const AuthController = {
       const salt = await bcrypt.genSalt(10);
       const hash = await bcrypt.hash(password, salt);
       const newUser = new User({
-        name,
+        username,
         password: hash,
       });
       await newUser.save();
@@ -28,28 +28,26 @@ export const AuthController = {
           httpOnly: true,
           maxAge: 24 * 60 * 60 * 1000,
         })
-        .status(303);
+        .json("User created");
     } catch (err) {
       next(err);
     }
   },
   async signIn(req, res, next) {
-    const { name, password } = req.body;
-    if (!name || !password) {
-      return next(CustomError(403, "{name,password} is required"));
+    const { username, password } = req.body;
+    if (!username || !password) {
+      return next(CustomError(403, "{username,password} is required"));
     }
     try {
-      const user = await User.findOne({ name });
+      const user = await User.findOne({ username });
       if (!user) return next(CustomError(400, "Wrong credentials"));
       const correctPassword = await bcrypt.compare(password, user.password);
       if (!correctPassword) return next(CustomError(400, "Wrong credentials"));
       const token = JWT.sign({ id: user._id });
-      res
-        .cookie("token", token, {
-          httpOnly: true,
-          maxAge: 24 * 60 * 60 * 1000,
-        })
-        .status(303);
+      res.cookie("token", token, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000,
+      });
     } catch (err) {
       next(err);
     }
