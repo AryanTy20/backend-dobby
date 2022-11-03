@@ -17,8 +17,9 @@ import { dbConnect } from "./dbConnect";
 dbConnect();
 
 //Routes
-import { AuthRoutes } from "./routes";
+import { AuthRoutes, UserRoutes } from "./routes";
 app.use("/api/auth", AuthRoutes);
+app.use("/api/user", AuthRoutes);
 
 // Error handler
 app.use((err, req, res, next) => {
