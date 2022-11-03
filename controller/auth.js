@@ -22,12 +22,25 @@ export const AuthController = {
         password: hash,
       });
       await newUser.save();
-      return res.status(204).json("User created");
+      return res.status(201).json("User created");
     } catch (err) {
       next(err);
     }
   },
-  async signIn(req, res, next) {},
+  async signIn(req, res, next) {
+    const { name, password } = req.body;
+    if (!name || !password) {
+      return next(CustomError(403, "{name,password} is required"));
+    }
+    try {
+      const user = await User.findOne({ name });
+      if (!user) return next(CustomError(400, "Wrong credentials"));
+      const correctPassword = await bcrypt.compare(password, user.password);
+      if (!correctPassword) return next(CustomError(400, "Wrong credentials"));
+    } catch (err) {
+      next(err);
+    }
+  },
   async logout(req, res, next) {
     res.send("logout");
   },
