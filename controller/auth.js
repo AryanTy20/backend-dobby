@@ -15,6 +15,8 @@ export const AuthController = {
     }
 
     try {
+      const user = await User.findOne({ username });
+      if (user) return next(CustomError(403, "Username Taken"));
       const salt = await bcrypt.genSalt(10);
       const hash = await bcrypt.hash(password, salt);
       const newUser = new User({
@@ -44,19 +46,23 @@ export const AuthController = {
       const correctPassword = await bcrypt.compare(password, user.password);
       if (!correctPassword) return next(CustomError(400, "Wrong credentials"));
       const token = JWT.sign({ id: user._id });
-      res.cookie("token", token, {
-        httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000,
-      });
+      res
+        .cookie("token", token, {
+          httpOnly: true,
+          maxAge: 24 * 60 * 60 * 1000,
+        })
+        .json("Login success");
     } catch (err) {
       next(err);
     }
   },
   async logout(req, res, next) {
-    if (!req.cookie) return next(CustomError(403, "Unauthorized"));
-    res.clearCookie("token", {
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-    });
+    if (!req.cookies) return next(CustomError(403, "Unauthorized"));
+    res
+      .clearCookie("token", {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000,
+      })
+      .json("logout sucess");
   },
 };
