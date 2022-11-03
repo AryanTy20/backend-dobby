@@ -4,6 +4,7 @@ const imgSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
+    unique: true,
   },
   image: {
     type: String,
@@ -15,6 +16,7 @@ const userScheme = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   password: {
     type: String,
