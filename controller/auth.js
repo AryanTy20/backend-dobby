@@ -1,6 +1,6 @@
 import { User } from "../models";
 import bcrypt from "bcrypt";
-import { CustomError } from "../utils";
+import { CustomError, JWT } from "../utils";
 
 export const AuthController = {
   async signUp(req, res, next) {
@@ -22,7 +22,13 @@ export const AuthController = {
         password: hash,
       });
       await newUser.save();
-      return res.status(201).json("User created");
+      const token = JWT.sign({ id: newUser._id });
+      res
+        .cookie("token", token, {
+          httpOnly: true,
+          maxAge: 24 * 60 * 60 * 1000,
+        })
+        .status(303);
     } catch (err) {
       next(err);
     }
@@ -37,6 +43,13 @@ export const AuthController = {
       if (!user) return next(CustomError(400, "Wrong credentials"));
       const correctPassword = await bcrypt.compare(password, user.password);
       if (!correctPassword) return next(CustomError(400, "Wrong credentials"));
+      const token = JWT.sign({ id: user._id });
+      res
+        .cookie("token", token, {
+          httpOnly: true,
+          maxAge: 24 * 60 * 60 * 1000,
+        })
+        .status(303);
     } catch (err) {
       next(err);
     }
