@@ -30,7 +30,7 @@ export const AuthController = {
           httpOnly: true,
           maxAge: 24 * 60 * 60 * 1000,
         })
-        .json("User created");
+        .json({ user: user.username });
     } catch (err) {
       next(err);
     }
@@ -51,7 +51,7 @@ export const AuthController = {
           httpOnly: true,
           maxAge: 24 * 60 * 60 * 1000,
         })
-        .json("Login success");
+        .json({ user: user.username });
     } catch (err) {
       next(err);
     }
