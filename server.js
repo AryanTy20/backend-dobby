@@ -1,6 +1,6 @@
-import cookieParser from "cookie-parser";
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 const app = express();
 const PORT = process.env.PORT || 5000;
 //core setting
@@ -11,6 +11,9 @@ app.use(
     origin: "*",
   })
 );
+//DB Connection
+import { dbConnect } from "./dbConnect";
+dbConnect();
 
 //Routes
 
