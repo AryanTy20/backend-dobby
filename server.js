@@ -4,7 +4,8 @@ import cookieParser from "cookie-parser";
 const app = express();
 const PORT = process.env.PORT || 5000;
 //core setting
-app.use(express.json());
+app.use(express.json({ limit: "5mb", extended: true }));
+app.use(express.urlencoded({ limit: "5mb", extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
