@@ -55,6 +55,10 @@ export const AuthController = {
     }
   },
   async logout(req, res, next) {
-    res.send("logout");
+    if (!req.cookie) return next(CustomError(403, "Unauthorized"));
+    res.clearCookie("token", {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
   },
 };
