@@ -3,11 +3,9 @@ import mongoose from "mongoose";
 const imgSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
   },
   image: {
     type: String,
-    required: true,
   },
 });
 

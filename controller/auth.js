@@ -15,7 +15,7 @@ export const AuthController = {
     }
 
     try {
-      const user = await User.findOne({ username });
+      const user = await User.exists({ username });
       if (user) return next(CustomError(403, "Username Taken"));
       const salt = await bcrypt.genSalt(10);
       const hash = await bcrypt.hash(password, salt);
@@ -29,8 +29,9 @@ export const AuthController = {
         .cookie("token", token, {
           httpOnly: true,
           maxAge: 24 * 60 * 60 * 1000,
+          sameSite: none,
         })
-        .json({ user: user.username });
+        .json({ user: newUser.username });
     } catch (err) {
       next(err);
     }
@@ -50,6 +51,7 @@ export const AuthController = {
         .cookie("token", token, {
           httpOnly: true,
           maxAge: 24 * 60 * 60 * 1000,
+          sameSite: none,
         })
         .json({ user: user.username });
     } catch (err) {
