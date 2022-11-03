@@ -1,10 +1,9 @@
 import mongoose from "mongoose";
 
 const imgSchema = new mongoose.Schema({
-  title: {
+  name: {
     type: String,
     required: true,
-    unique: true,
   },
   image: {
     type: String,
