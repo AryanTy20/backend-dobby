@@ -1,5 +1,6 @@
 import { User } from "../models";
 import { CustomError } from "../utils";
+import mongoose from "mongoose";
 
 export const UserController = {
   async upload(req, res, next) {
@@ -14,7 +15,23 @@ export const UserController = {
       next(err);
     }
   },
-  async search(req, res, next) {},
+  async search(req, res, next) {
+    const query = req.query.name;
+    try {
+      const user = await User.findById(req.user.id);
+      const data = user.images
+        .map((item) => {
+          if (new RegExp(query, "i").test(item.name)) {
+            return item;
+          }
+        })
+        .filter((el) => el);
+
+      res.status(200).json(data);
+    } catch (err) {
+      next(err);
+    }
+  },
   async getImg(req, res, next) {
     try {
       const user = await User.findOne({ _id: req.user.id });
