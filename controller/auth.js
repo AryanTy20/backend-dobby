@@ -29,7 +29,7 @@ export const AuthController = {
         .cookie("token", token, {
           httpOnly: true,
           maxAge: 24 * 60 * 60 * 1000,
-          sameSite: none,
+          sameSite: "none",
         })
         .json({ user: newUser.username });
     } catch (err) {
@@ -51,7 +51,7 @@ export const AuthController = {
         .cookie("token", token, {
           httpOnly: true,
           maxAge: 24 * 60 * 60 * 1000,
-          sameSite: none,
+          sameSite: "none",
         })
         .json({ user: user.username });
     } catch (err) {
@@ -66,5 +66,13 @@ export const AuthController = {
         maxAge: 24 * 60 * 60 * 1000,
       })
       .json("logout sucess");
+  },
+  async refreshAccess(req, res, next) {
+    try {
+      const user = await User.findById(req.user.id);
+      res.status(200).json({ user: user.username });
+    } catch (err) {
+      next(err);
+    }
   },
 };
