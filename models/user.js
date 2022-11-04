@@ -1,14 +1,5 @@
 import mongoose from "mongoose";
 
-const imgSchema = new mongoose.Schema({
-  name: {
-    type: String,
-  },
-  image: {
-    type: String,
-  },
-});
-
 const userScheme = new mongoose.Schema({
   username: {
     type: String,
@@ -20,7 +11,16 @@ const userScheme = new mongoose.Schema({
     required: true,
   },
   images: {
-    type: [{ imgSchema }],
+    type: [
+      {
+        name: {
+          type: String,
+        },
+        image: {
+          type: String,
+        },
+      },
+    ],
   },
 });
 
