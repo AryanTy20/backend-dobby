@@ -59,7 +59,6 @@ export const AuthController = {
     }
   },
   async logout(req, res, next) {
-    if (!req.cookies) return next(CustomError(403, "Unauthorized"));
     res
       .clearCookie("token", {
         httpOnly: true,
