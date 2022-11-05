@@ -30,6 +30,7 @@ export const AuthController = {
           httpOnly: true,
           maxAge: 24 * 60 * 60 * 1000,
           sameSite: "none",
+        secure:true
         })
         .json({ user: newUser.username });
     } catch (err) {
@@ -52,6 +53,7 @@ export const AuthController = {
           httpOnly: true,
           maxAge: 24 * 60 * 60 * 1000,
           sameSite: "none",
+         secure:true
         })
         .json({ user: user.username });
     } catch (err) {
@@ -63,6 +65,7 @@ export const AuthController = {
       .clearCookie("token", {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
+       secure:true
       })
       .json("logout sucess");
   },
