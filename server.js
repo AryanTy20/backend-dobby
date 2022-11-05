@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 const app = express();
 const PORT = process.env.PORT || 5000;
 //core setting
-const allowedUrl = ["http://localhost:3000"];
+const allowedUrl = ["https://shiny-squirrel-26dd3f.netlify.app"];
 app.use(express.json({ limit: "5mb", extended: true }));
 app.use(express.urlencoded({ limit: "5mb", extended: true }));
 app.use(cookieParser());
