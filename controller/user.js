@@ -1,12 +1,13 @@
 import { User } from "../models";
 import { CustomError } from "../utils";
-import mongoose from "mongoose";
 
 export const UserController = {
   async upload(req, res, next) {
     if (!req.body) return next(CustomError(403, "{name,image}  is required"));
-
     try {
+      const user = await User.findById(req.user.id);
+      const exist = user.images.some((item) => item.name === req.body.name);
+      if (exist) return next(CustomError(403, "Name already exist"));
       await User.findByIdAndUpdate(req.user.id, {
         $push: { images: req.body },
       });
@@ -26,7 +27,6 @@ export const UserController = {
           }
         })
         .filter((el) => el);
-
       res.status(200).json(data);
     } catch (err) {
       next(err);
