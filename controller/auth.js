@@ -64,7 +64,7 @@ export const AuthController = {
     res
       .clearCookie("token", {
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000,
+        maxAge:0,
        secure:true
       })
       .json("logout sucess");
